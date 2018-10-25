@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			showTabContent(tab.indexOf(target));
 		}
 	});
-	
+
 	// Timer 
 	let setTimer = (deadline, id) => {
 		let getTimeRemaining = (deadline) => {
@@ -75,6 +75,19 @@ window.addEventListener("DOMContentLoaded", () => {
 		};
 		setClock(id, deadline);
 	};
-
 	setTimer('2018-12-18', 'timer');
+
+	//Modal
+	let more = document.querySelector('.more'),
+		overlay = document.querySelector('.overlay'),
+		close = document.querySelector('.popup-close');
+	
+	more.addEventListener('click', () => {
+		overlay.style.display = 'block';
+		document.body.style.overflow = 'hidden';
+	});
+	close.addEventListener('click', () => {
+		overlay.style.display = 'none';
+		document.body.style.overflow = '';
+	});
 });
