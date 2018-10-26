@@ -81,13 +81,22 @@ window.addEventListener("DOMContentLoaded", () => {
 	let more = document.querySelector('.more'),
 		overlay = document.querySelector('.overlay'),
 		close = document.querySelector('.popup-close');
+
+		let openModal = () => {
+			overlay.style.display = 'block';
+			document.body.style.overflow = 'hidden';
+		};
+
+		let closeModal = () => {
+			overlay.style.display = 'none';
+		 document.body.style.overflow = '';
+		};
 	
-	more.addEventListener('click', () => {
-		overlay.style.display = 'block';
-		document.body.style.overflow = 'hidden';
-	});
-	close.addEventListener('click', () => {
-		overlay.style.display = 'none';
-		document.body.style.overflow = '';
-	});
+	more.addEventListener('click', openModal);
+	close.addEventListener('click', closeModal);
+
+	let descriptionBtns = document.querySelectorAll('.description-btn');
+	for (let i = 0; i < descriptionBtns.length; i++) {
+		descriptionBtns[i].addEventListener('click', openModal);
+	}
 });
