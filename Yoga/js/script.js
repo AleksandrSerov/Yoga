@@ -103,7 +103,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	//Form
 	let message = {
 		loading: "Загрузка",
-		success: "Спасибо! Скоро мы с вами свяжемся!", 
+		success: "Спасибо! Скоро мы с вами свяжемся!",
 		failure: "Что-то пошло не так..."
 	};
 
@@ -112,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		statusMessage = document.createElement('div'),
 		contactForm = document.querySelector('#form');
 	statusMessage.classList.add('status');
-	
+
 	let sendForm = (elem) => {
 		elem.addEventListener('submit', (e) => {
 			e.preventDefault();
@@ -159,4 +159,44 @@ window.addEventListener("DOMContentLoaded", () => {
 	};
 	sendForm(form);
 	sendForm(contactForm);
+
+	//Slider
+	let slideIndex = 1,
+		slides = document.querySelectorAll(".slider-item"),
+		prev = document.querySelector(".prev"),
+		next = document.querySelector(".next"),
+		dotsWrap = document.querySelector(".slider-dots"),
+		dots = Array.prototype.slice.call(document.querySelectorAll('.dot'));
+
+	let showSlides = (number) => {
+		if (number > slides.length) {
+			slideIndex = 1;
+		}
+		if (number < 1) {
+			slideIndex = slides.length;
+		}
+		slides.forEach((item) => item.style.display = "none");
+		dots.forEach((item) => item.classList.remove("dot-active"));
+		slides[slideIndex - 1].style.display = "block";
+		dots[slideIndex - 1].classList.add("dot-active");
+	};
+	showSlides(slideIndex);
+	let plusSlides = (number) => {
+		showSlides(slideIndex += number);
+	};
+	let currentSlide = (number) => {
+		showSlides(slideIndex = number);
+	};
+	prev.addEventListener("click", () => {
+		plusSlides(-1);
+	});
+	next.addEventListener("click", () => {
+		plusSlides(1);
+	});
+	dotsWrap.addEventListener("click", (event) => {
+		if (event.target.classList.contains('dot')) {
+			currentSlide(dots.indexOf(event.target)+1);
+		} 
+	});
+
 });
