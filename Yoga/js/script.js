@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				seconds = Math.floor((t / 1000) % 60),
 				minutes = Math.floor((t / 1000 / 60) % 60),
 				hours = Math.floor((t / (1000 * 60 * 60)));
-	
+
 			if (seconds < 10) {
 				seconds = "0" + seconds;
 			}
@@ -82,16 +82,16 @@ window.addEventListener("DOMContentLoaded", () => {
 		overlay = document.querySelector('.overlay'),
 		close = document.querySelector('.popup-close');
 
-		let openModal = () => {
-			overlay.style.display = 'block';
-			document.body.style.overflow = 'hidden';
-		};
+	let openModal = () => {
+		overlay.style.display = 'block';
+		document.body.style.overflow = 'hidden';
+	};
 
-		let closeModal = () => {
-			overlay.style.display = 'none';
-		 document.body.style.overflow = '';
-		};
-	
+	let closeModal = () => {
+		overlay.style.display = 'none';
+		document.body.style.overflow = '';
+	};
+
 	more.addEventListener('click', openModal);
 	close.addEventListener('click', closeModal);
 
@@ -99,4 +99,64 @@ window.addEventListener("DOMContentLoaded", () => {
 	for (let i = 0; i < descriptionBtns.length; i++) {
 		descriptionBtns[i].addEventListener('click', openModal);
 	}
+
+	//Form
+	let message = {
+		loading: "Загрузка",
+		success: "Спасибо! Скоро мы с вами свяжемся!", 
+		failure: "Что-то пошло не так..."
+	};
+
+	let form = document.querySelector('.main-form'),
+		inputs = Array.prototype.slice.call(document.querySelectorAll('input')),
+		statusMessage = document.createElement('div'),
+		contactForm = document.querySelector('#form');
+	statusMessage.classList.add('status');
+	
+	let sendForm = (elem) => {
+		elem.addEventListener('submit', (e) => {
+			e.preventDefault();
+			elem.appendChild(statusMessage);
+			let formData = new FormData(elem);
+
+			let postData = (data) => {
+				return new Promise((resolve, reject) => {
+					let request = new XMLHttpRequest();
+					request.open("POST", "server.php");
+					request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+					request.onreadystatechange = () => {
+						if (request.readyState < 4) {
+							resolve();
+						} else if (request.readyState === 4) {
+							if (request.status == 200 && request.status < 300) {
+								resolve();
+							} else {
+								reject();
+							}
+						}
+					};
+					request.send(data);
+				});
+			};
+
+			let clearInput = () => {
+				for (let item of inputs) {
+					item.value = "";
+				}
+			};
+
+			postData(formData)
+				.then(() => {
+					statusMessage.innerHTML = message.loading;
+				})
+				.then(() => {
+					statusMessage.innerHTML = message.success;
+				})
+				.catch(() => statusMessage.innerHTML = message.failure)
+				.then(clearInput);
+		});
+	};
+	sendForm(form);
+	sendForm(contactForm);
 });
